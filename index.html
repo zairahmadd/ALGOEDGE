@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AlgoEdge — Indian Market Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+  --bg:#080b12;
+  --surface:#0d1120;
+  --surface2:#111827;
+  --border:#1c2538;
+  --border2:#243044;
+  --green:#00c97a;
+  --green-dim:#00c97a22;
+  --red:#ff3d5a;
+  --red-dim:#ff3d5a22;
+  --amber:#f59e0b;
+  --amber-dim:#f59e0b22;
+  --blue:#3b82f6;
+  --text:#e2e8f4;
+  --text2:#8494aa;
+  --text3:#3d4f65;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'Outfit',sans-serif;
+  --display:'Bebas Neue',sans-serif;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* scanline bg */
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,255,255,.008) 3px,rgba(255,255,255,.008) 4px);
+  pointer-events:none;z-index:0;
+}
+
+.wrap{
+  position:relative;z-index:1;
+  max-width:820px;
+  margin:0 auto;
+  padding:44px 24px 80px;
+}
+
+/* ── HEADER ── */
+.header{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border2);
+  padding-bottom:20px;
+  margin-bottom:40px;
+  gap:16px;
+  flex-wrap:wrap;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.logo-mark{
+  width:42px;height:42px;
+  background:linear-gradient(135deg,#1d4ed8,#3b82f6);
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+  box-shadow:0 0 24px rgba(59,130,246,0.35);
+}
+
+.logo-text{
+  font-family:var(--display);
+  font-size:36px;
+  letter-spacing:2px;
+  background:linear-gradient(90deg,#e2e8f4 0%,#3b82f6 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  line-height:1;
+}
+
+.logo-sub{
+  font-family:var(--mono);
+  font-size:9px;
+  color:var(--text3);
+  letter-spacing:3px;
+  text-transform:uppercase;
+  margin-top:3px;
+}
+
+.header-right{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text3);
+  text-align:right;
+  line-height:1.7;
+}
+
+/* ── EXTRA INPUTS ── */
+.extra-inputs{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:10px;margin-top:12px;
+}
+@media(max-width:520px){.extra-inputs{grid-template-columns:1fr;}}
+
+.extra-field{display:flex;flex-direction:column;gap:5px;}
+
+.extra-label{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--text3);
+}
+
+.extra-select, .extra-input{
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  border-radius:8px;
+  color:var(--text);
+  font-family:var(--mono);font-size:12px;
+  padding:9px 12px;
+  outline:none;
+  transition:border-color .2s;
+  width:100%;
+}
+.extra-select:focus,.extra-input:focus{border-color:var(--blue);}
+.extra-select option{background:var(--surface2);}
+
+.context-field{
+  margin-top:10px;
+}
+.context-textarea{
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  border-radius:8px;
+  color:var(--text);
+  font-family:var(--mono);font-size:12px;
+  padding:10px 12px;
+  outline:none;
+  width:100%;
+  resize:vertical;
+  min-height:72px;
+  line-height:1.6;
+  transition:border-color .2s;
+}
+.context-textarea:focus{border-color:var(--blue);}
+.context-textarea::placeholder{color:var(--text3);}
+
+/* ── SEARCH ── */
+.search-box{
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:16px;
+  padding:28px 28px 24px;
+  margin-bottom:0;
+}
+
+.search-eyebrow{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--text3);
+  margin-bottom:14px;
+}
+
+.search-row{
+  display:flex;
+  gap:0;
+  border:1px solid var(--border2);
+  border-radius:10px;
+  overflow:hidden;
+  transition:border-color .2s,box-shadow .2s;
+}
+
+.search-row:focus-within{
+  border-color:var(--blue);
+  box-shadow:0 0 0 3px rgba(59,130,246,.12);
+}
+
+.search-input{
+  flex:1;
+  background:transparent;
+  border:none;
+  outline:none;
+  color:var(--text);
+  font-family:var(--display);
+  font-size:28px;
+  letter-spacing:1px;
+  padding:14px 18px;
+}
+
+.search-input::placeholder{color:var(--text3);font-style:normal;}
+
+.search-btn{
+  padding:14px 24px;
+  background:var(--blue);
+  border:none;
+  color:#fff;
+  font-family:var(--mono);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:background .15s;
+  white-space:nowrap;
+}
+
+.search-btn:hover{background:#2563eb;}
+.search-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+.chips{
+  display:flex;flex-wrap:wrap;gap:8px;
+  margin-top:14px;align-items:center;
+}
+
+.chip-label{
+  font-family:var(--mono);font-size:9px;
+  color:var(--text3);letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.chip{
+  font-family:var(--mono);font-size:10px;
+  padding:5px 13px;
+  border:1px solid var(--border2);
+  border-radius:20px;
+  background:var(--surface2);
+  color:var(--text2);
+  cursor:pointer;
+  transition:all .15s;
+}
+
+.chip:hover{border-color:var(--blue);color:var(--blue);}
+
+/* ── LOADING ── */
+.loading{
+  display:none;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:44px 32px;
+  margin-top:28px;
+  text-align:center;
+}
+
+.spin{
+  width:40px;height:40px;
+  border:2px solid var(--border2);
+  border-top-color:var(--blue);
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+  margin:0 auto 18px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.loading-title{
+  font-family:var(--display);font-size:24px;
+  letter-spacing:1px;color:var(--text2);
+  margin-bottom:22px;
+}
+
+.steps{
+  display:flex;flex-direction:column;gap:7px;
+  max-width:320px;margin:0 auto;text-align:left;
+}
+
+.st{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:11px;
+  color:var(--text3);transition:color .3s;
+}
+
+.st.active{color:var(--blue);}
+.st.done{color:var(--green);}
+.st-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0;}
+
+/* ── RESULT ── */
+.result{
+  display:none;
+  margin-top:28px;
+  animation:up .45s ease forwards;
+}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* VERDICT CARD */
+.v-card{
+  border-radius:16px;
+  padding:28px 30px 24px;
+  margin-bottom:18px;
+  border:1px solid;
+  position:relative;overflow:hidden;
+}
+
+.v-card.buy{background:linear-gradient(135deg,rgba(0,201,122,.07),rgba(0,201,122,.02));border-color:rgba(0,201,122,.35);box-shadow:0 0 50px rgba(0,201,122,.07);}
+.v-card.sell{background:linear-gradient(135deg,rgba(255,61,90,.07),rgba(255,61,90,.02));border-color:rgba(255,61,90,.35);box-shadow:0 0 50px rgba(255,61,90,.07);}
+.v-card.hold{background:linear-gradient(135deg,rgba(245,158,11,.07),rgba(245,158,11,.02));border-color:rgba(245,158,11,.35);box-shadow:0 0 50px rgba(245,158,11,.07);}
+
+.v-glow{
+  position:absolute;top:-80px;right:-80px;
+  width:220px;height:220px;
+  border-radius:50%;filter:blur(70px);opacity:.25;
+  pointer-events:none;
+}
+.buy .v-glow{background:var(--green);}
+.sell .v-glow{background:var(--red);}
+.hold .v-glow{background:var(--amber);}
+
+.v-top{
+  display:flex;justify-content:space-between;
+  align-items:flex-start;gap:16px;flex-wrap:wrap;
+  margin-bottom:20px;
+}
+
+.v-name{
+  font-family:var(--display);
+  font-size:clamp(24px,4vw,36px);
+  letter-spacing:1px;
+  color:var(--text);line-height:1.1;
+}
+
+.v-meta{
+  font-family:var(--mono);font-size:10px;
+  color:var(--text3);margin-top:5px;
+  letter-spacing:1px;text-transform:uppercase;
+}
+
+.v-verdict-block{text-align:right;flex-shrink:0;}
+
+.v-word{
+  font-family:var(--display);
+  font-size:clamp(40px,7vw,64px);
+  letter-spacing:3px;line-height:1;
+}
+.buy .v-word{color:var(--green);}
+.sell .v-word{color:var(--red);}
+.hold .v-word{color:var(--amber);}
+
+.v-conf-label{
+  font-family:var(--mono);font-size:10px;
+  color:var(--text3);margin-top:4px;
+}
+
+.conf-bar{
+  height:3px;background:var(--border2);
+  border-radius:2px;overflow:hidden;
+  margin-top:16px;
+}
+.conf-fill{
+  height:100%;width:0;
+  transition:width 1.2s cubic-bezier(.4,0,.2,1);
+  border-radius:2px;
+}
+.buy .conf-fill{background:var(--green);}
+.sell .conf-fill{background:var(--red);}
+.hold .conf-fill{background:var(--amber);}
+
+/* RATIONALE POINTERS */
+.rationale-block{
+  border-left:3px solid;
+  padding:18px 20px;
+  margin-bottom:18px;
+  background:rgba(0,0,0,.2);
+  border-radius:0 10px 10px 0;
+}
+.buy .rationale-block{border-color:var(--green);}
+.sell .rationale-block{border-color:var(--red);}
+.hold .rationale-block{border-color:var(--amber);}
+
+.rationale-eyebrow{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--text3);margin-bottom:12px;
+}
+
+.rationale-list{
+  list-style:none;
+  display:flex;flex-direction:column;gap:9px;
+}
+
+.rationale-list li{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:14px;line-height:1.6;color:var(--text);
+}
+
+.r-bullet{
+  font-family:var(--mono);font-size:12px;
+  flex-shrink:0;margin-top:1px;
+}
+.buy .r-bullet{color:var(--green);}
+.sell .r-bullet{color:var(--red);}
+.hold .r-bullet{color:var(--amber);}
+
+/* THREE SCORES */
+.scores{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:12px;margin-bottom:18px;
+}
+
+@media(max-width:480px){.scores{grid-template-columns:1fr;}}
+
+.sc{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px;text-align:center;
+}
+
+.sc-label{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--text3);margin-bottom:8px;
+}
+
+.sc-num{
+  font-family:var(--display);
+  font-size:40px;letter-spacing:1px;line-height:1;
+}
+.sc-num.pos{color:var(--green);}
+.sc-num.neu{color:var(--amber);}
+.sc-num.neg{color:var(--red);}
+
+.sc-sub{
+  font-family:var(--mono);font-size:9px;
+  color:var(--text3);margin-top:4px;
+}
+
+/* SIGNALS GRID */
+.signals{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:14px;margin-bottom:18px;
+}
+@media(max-width:560px){.signals{grid-template-columns:1fr;}}
+
+.sig-block{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:18px;
+}
+
+.sig-block-title{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--text3);
+  border-bottom:1px solid var(--border);
+  padding-bottom:8px;margin-bottom:12px;
+}
+
+.sig-row{
+  display:flex;justify-content:space-between;
+  align-items:center;padding:6px 0;
+  border-bottom:1px solid var(--border);
+  gap:8px;
+}
+.sig-row:last-child{border-bottom:none;}
+
+.sig-n{
+  font-family:var(--mono);font-size:11px;
+  color:var(--text2);
+}
+.sig-v{
+  font-family:var(--mono);font-size:11px;
+  font-weight:500;text-align:right;
+}
+.bull{color:var(--green);}
+.bear{color:var(--red);}
+.neut{color:var(--amber);}
+
+/* METRICS ROW — stop loss + upside */
+.metrics-row{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:14px;margin-bottom:18px;
+}
+@media(max-width:600px){.metrics-row{grid-template-columns:1fr!important;}}
+
+.metric-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:18px 20px;
+  display:flex;flex-direction:column;gap:6px;
+}
+
+.metric-label{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--text3);
+}
+
+.metric-value{
+  font-family:var(--display);
+  font-size:32px;letter-spacing:1px;line-height:1;
+}
+.metric-value.red-v{color:var(--red);}
+.metric-value.green-v{color:var(--green);}
+
+.metric-hint{
+  font-family:var(--mono);font-size:10px;
+  color:var(--text3);
+}
+
+/* TIMELINE */
+.timeline{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:18px;
+}
+
+.tl-title{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--text3);
+  border-bottom:1px solid var(--border);
+  padding-bottom:8px;margin-bottom:16px;
+}
+
+.tl-track{padding-left:16px;}
+
+.tl-item{
+  display:flex;gap:14px;
+  position:relative;
+  margin-bottom:18px;
+}
+.tl-item:last-child{margin-bottom:0;}
+
+.tl-item::before{
+  content:'';
+  position:absolute;left:-10px;top:16px;
+  bottom:-18px;width:1px;
+  background:var(--border);
+}
+.tl-item:last-child::before{display:none;}
+
+.tl-dot{
+  width:12px;height:12px;
+  border-radius:50%;border:2px solid;
+  background:var(--bg);flex-shrink:0;
+  margin-top:2px;
+  position:relative;left:-16px;
+  margin-right:-4px;
+}
+.t-s .tl-dot{border-color:var(--amber);}
+.t-m .tl-dot{border-color:var(--blue);}
+.t-l .tl-dot{border-color:var(--green);}
+
+.tl-period{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--text3);margin-bottom:3px;
+}
+
+.tl-text{
+  font-size:13px;line-height:1.6;color:var(--text2);
+}
+
+.tl-price{
+  display:inline-block;
+  font-family:var(--mono);font-size:10px;
+  margin-top:5px;padding:2px 10px;
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  border-radius:4px;color:var(--text);
+}
+
+/* CATALYST / RISK */
+.cr-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:14px;margin-bottom:18px;
+}
+@media(max-width:560px){.cr-grid{grid-template-columns:1fr;}}
+
+.cr-block{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;padding:18px;
+}
+
+.cr-title{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:3px;text-transform:uppercase;
+  border-bottom:1px solid var(--border);
+  padding-bottom:8px;margin-bottom:12px;
+}
+.cr-title.cat{color:var(--green);}
+.cr-title.risk{color:var(--red);}
+
+.cr-list{
+  list-style:none;
+  display:flex;flex-direction:column;gap:8px;
+}
+.cr-list li{
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:13px;line-height:1.5;color:var(--text2);
+}
+.cr-icon{font-size:12px;flex-shrink:0;margin-top:1px;}
+
+/* INVESTOR TYPE */
+.investor-tag{
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  border-radius:8px;
+  padding:12px 16px;
+  font-family:var(--mono);font-size:11px;
+  color:var(--text2);
+  margin-bottom:18px;
+  display:flex;align-items:center;gap:10px;
+}
+
+/* DISCLAIMER */
+.disc{
+  border-top:1px solid var(--border);
+  padding-top:14px;
+  font-family:var(--mono);font-size:10px;
+  color:var(--text3);line-height:1.7;
+}
+
+.reset-btn{
+  display:inline-block;
+  margin-top:18px;
+  font-family:var(--mono);font-size:11px;
+  color:var(--text3);cursor:pointer;
+  background:none;border:none;
+  text-decoration:underline;text-underline-offset:3px;
+  letter-spacing:1px;transition:color .15s;
+}
+.reset-btn:hover{color:var(--blue);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-mark">⚡</div>
+      <div>
+        <div class="logo-text">AlgoEdge</div>
+        <div class="logo-sub">Indian Market Intelligence</div>
+      </div>
+    </div>
+    <div class="header-right">
+      NSE · BSE · SEBI Framework<br>
+      RSI · MACD · DCF · Graham · FII/DII
+    </div>
+  </header>
+
+  <!-- SEARCH -->
+  <div class="search-box" id="searchBox">
+    <div class="search-eyebrow">Enter any stock — AlgoEdge does the rest</div>
+    <div class="search-row">
+      <input class="search-input" id="stockInput" type="text"
+        placeholder="Reliance, Infosys, Zomato…"
+        onkeydown="if(event.key==='Enter')run()" />
+      <button class="search-btn" id="searchBtn" onclick="run()">Analyse →</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:12px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:10px 14px;">
+      <span style="font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:2px;white-space:nowrap;">CMP OVERRIDE ₹</span>
+      <input id="cmpOverride" type="number" placeholder="Optional: enter live price manually"
+        style="flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:var(--mono);font-size:13px;"
+        step="0.01"/>
+      <span style="font-family:var(--mono);font-size:9px;color:var(--text3);">bypass auto-fetch</span>
+    </div>
+    <!-- EXTRA INPUTS -->
+    <div class="extra-inputs">
+      <div class="extra-field">
+        <span class="extra-label">Holding Period</span>
+        <select id="holdingPeriod" class="extra-select">
+          <option value="">Select horizon</option>
+          <option value="intraday">Intraday</option>
+          <option value="short">Short-term (days–weeks)</option>
+          <option value="swing">Swing (1–3 months)</option>
+          <option value="medium">Medium (3–12 months)</option>
+          <option value="long">Long-term (1–3 years)</option>
+          <option value="very_long">Very long (3+ years)</option>
+        </select>
+      </div>
+      <div class="extra-field">
+        <span class="extra-label">Risk Appetite</span>
+        <select id="riskAppetite" class="extra-select">
+          <option value="">Select risk level</option>
+          <option value="conservative">Conservative (capital preservation)</option>
+          <option value="moderate">Moderate (balanced)</option>
+          <option value="aggressive">Aggressive (high growth)</option>
+          <option value="speculative">Speculative (high risk/reward)</option>
+        </select>
+      </div>
+      <div class="extra-field" style="grid-column:1/-1;">
+        <span class="extra-label">Investment Amount (₹)</span>
+        <input id="investAmount" type="number" class="extra-input" placeholder="e.g. 50000  —  used for position sizing &amp; lot calculation" min="0" step="1000"/>
+      </div>
+    </div>
+    <div class="chips">
+      <span class="chip-label">Try:</span>
+      <span class="chip" onclick="pick('Reliance Industries')">Reliance</span>
+      <span class="chip" onclick="pick('TCS')">TCS</span>
+      <span class="chip" onclick="pick('HDFC Bank')">HDFC Bank</span>
+      <span class="chip" onclick="pick('Zomato')">Zomato</span>
+      <span class="chip" onclick="pick('Adani Ports')">Adani Ports</span>
+      <span class="chip" onclick="pick('Bajaj Finance')">Bajaj Finance</span>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading" id="loadingBox">
+    <div class="spin"></div>
+    <div class="loading-title">Analysing <span id="ldName" style="color:var(--blue)"></span></div>
+    <div class="steps">
+      <div class="st" id="s1"><span class="st-dot"></span>Fetching live price from Yahoo Finance</div>
+      <div class="st" id="s2"><span class="st-dot"></span>Running RSI, MACD, Bollinger</div>
+      <div class="st" id="s3"><span class="st-dot"></span>DCF, Graham, PEG screening</div>
+      <div class="st" id="s4"><span class="st-dot"></span>FII/DII, promoter &amp; SEBI check</div>
+      <div class="st" id="s5"><span class="st-dot"></span>Generating verdict &amp; timeline</div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result" id="resultBox"></div>
+
+</div>
+<script>
+function pick(n){document.getElementById('stockInput').value=n;}
+function wait(ms){return new Promise(r=>setTimeout(r,ms));}
+function step(id,state){document.getElementById(id).className='st '+state;}
+
+// Common NSE symbols for instant lookup without an API call
+const SYMBOL_MAP={
+  'ola electric':'OLAELEC','ola':'OLAELEC',
+  'reliance':'RELIANCE','reliance industries':'RELIANCE',
+  'tcs':'TCS','tata consultancy':'TCS',
+  'infosys':'INFY','infy':'INFY',
+  'hdfc bank':'HDFCBANK','hdfc':'HDFCBANK',
+  'icici bank':'ICICIBANK','icici':'ICICIBANK',
+  'sbi':'SBIN','state bank':'SBIN',
+  'wipro':'WIPRO',
+  'hcl tech':'HCLTECH','hcl':'HCLTECH',
+  'bajaj finance':'BAJFINANCE','bajaj fin':'BAJFINANCE',
+  'zomato':'ZOMATO',
+  'adani ports':'ADANIPORTS','adani':'ADANIPORTS',
+  'adani green':'ADANIGREEN',
+  'adani enterprises':'ADANIENT',
+  'tata motors':'TATAMOTORS',
+  'tata steel':'TATASTEEL',
+  'tata power':'TATAPOWER',
+  'itc':'ITC',
+  'asian paints':'ASIANPAINT',
+  'maruti':'MARUTI','maruti suzuki':'MARUTI',
+  'bharti airtel':'BHARTIARTL','airtel':'BHARTIARTL',
+  'sun pharma':'SUNPHARMA',
+  'divis lab':'DIVISLAB','divi':'DIVISLAB',
+  'dr reddy':'DRREDDY',"dr reddy's":'DRREDDY',
+  'titan':'TITAN',
+  'nestle':'NESTLEIND',
+  'ultratech':'ULTRACEMCO','ultratech cement':'ULTRACEMCO',
+  'kotak':'KOTAKBANK','kotak bank':'KOTAKBANK','kotak mahindra':'KOTAKBANK',
+  'axis bank':'AXISBANK','axis':'AXISBANK',
+  'ongc':'ONGC',
+  'ntpc':'NTPC',
+  'power grid':'POWERGRID',
+  'l&t':'LT','larsen':'LT','larsen toubro':'LT',
+  'mahindra':'M&M','m&m':'M&M',
+  'hero motocorp':'HEROMOTOCO','hero':'HEROMOTOCO',
+  'bajaj auto':'BAJAJ-AUTO',
+  'eicher':'EICHERMOT',
+  'indusind':'INDUSINDBK','indusind bank':'INDUSINDBK',
+  'paytm':'PAYTM','one97':'PAYTM',
+  'nykaa':'NYKAA',
+  'policybazaar':'POLICYBZR',
+  'swiggy':'SWIGGY',
+  'ola electric':'OLAELEC',
+};
+
+async function resolveSymbol(raw){
+  // 1. Check local map first (instant)
+  const key=raw.toLowerCase().trim();
+  if(SYMBOL_MAP[key]) return SYMBOL_MAP[key];
+
+  // 2. If input looks like a ticker already (ALL CAPS, short), use it directly
+  if(/^[A-Z0-9&-]{2,15}$/.test(raw.trim())) return raw.trim();
+
+  // 3. Ask Claude as fallback
+  try{
+    const r=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:50,
+        messages:[{role:"user",content:`What is the exact NSE ticker symbol for "${raw}"? Reply with ONLY the ticker symbol, nothing else. Example: RELIANCE`}]
+      })
+    });
+    const d=await r.json();
+    return d.content?.[0]?.text?.trim().replace(/[^A-Z0-9&-]/g,'')||null;
+  }catch{return null;}
+}
+
+function fmtPrice(p){
+  return '₹'+Number(p).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+function fetchWithTimeout(url, ms){
+  return new Promise((resolve, reject)=>{
+    const controller = new AbortController();
+    const timer = setTimeout(()=>{ controller.abort(); reject(new Error('timeout')); }, ms);
+    fetch(url, {signal: controller.signal})
+      .then(r=>{ clearTimeout(timer); resolve(r); })
+      .catch(e=>{ clearTimeout(timer); reject(e); });
+  });
+}
+
+async function fetchLivePrice(symbol){
+  const tickers=[symbol+'.NS', symbol+'.BO'];
+  const proxies=[
+    u=>`https://corsproxy.io/?${encodeURIComponent(u)}`,
+    u=>`https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
+    u=>`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+  ];
+
+  for(const ticker of tickers){
+    const yahooUrl=`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${ticker}&fields=regularMarketPrice,currency,shortName`;
+
+    for(const mkProxy of proxies){
+      try{
+        const r = await fetchWithTimeout(mkProxy(yahooUrl), 9000);
+        if(!r.ok) continue;
+        const text = await r.text();
+        let json;
+        try{ json=JSON.parse(text); }catch{ continue; }
+        if(json.contents){ try{ json=JSON.parse(json.contents); }catch{ continue; } }
+        const result = json?.quoteResponse?.result?.[0];
+        const price  = result?.regularMarketPrice;
+        const currency = result?.currency;
+        console.log('[AlgoEdge] price hit:', ticker, price, currency);
+        if(price && (currency==='INR' || !currency)){
+          return{price:fmtPrice(price), raw:price, live:true, ticker};
+        }
+      }catch(e){ console.warn('[AlgoEdge] proxy fail:', ticker, e.message); }
+    }
+  }
+  return{price:null, live:false};
+}
+
+async function run(){
+  const raw=document.getElementById('stockInput').value.trim();
+  if(!raw)return;
+  document.getElementById('searchBox').style.display='none';
+  document.getElementById('loadingBox').style.display='block';
+  document.getElementById('ldName').textContent=raw;
+  document.getElementById('resultBox').style.display='none';
+
+  // Step 1: check manual override OR resolve symbol + fetch live price
+  step('s1','active');
+  const manualCmp=document.getElementById('cmpOverride').value.trim();
+  const holdingPeriod=document.getElementById('holdingPeriod').value;
+  const riskAppetite=document.getElementById('riskAppetite').value;
+  const investAmount=document.getElementById('investAmount').value.trim();
+  let liveData={price:null,live:false};
+  if(manualCmp && !isNaN(manualCmp)){
+    liveData={price:fmtPrice(parseFloat(manualCmp)),raw:parseFloat(manualCmp),live:true,manual:true};
+    console.log('[AlgoEdge] Using manual CMP:',liveData.price);
+  } else {
+    const symbol=await resolveSymbol(raw);
+    if(symbol){ liveData=await fetchLivePrice(symbol); }
+  }
+  step('s1','done');
+
+  await wait(200); step('s2','active');
+  await wait(600); step('s2','done');
+  await wait(200); step('s3','active');
+  await wait(600); step('s3','done');
+  await wait(200); step('s4','active');
+  await wait(600); step('s4','done');
+  await wait(200); step('s5','active');
+
+  const cmpInstruction = liveData.live
+    ? `IMPORTANT: The LIVE market price fetched RIGHT NOW from Yahoo Finance is ${liveData.price}. Set "currentMarketPrice" to exactly "${liveData.price}" and "priceIsLive" to true. Base your entry, stop loss and upside calculations on this live price.`
+    : `Live price fetch was unavailable. Estimate "currentMarketPrice" from your training knowledge and set "priceIsLive" to false. Mark it clearly as approximate.`;
+
+  const prompt=`You are AlgoEdge, a senior Indian stock market analyst with deep expertise in NSE/BSE equities, SEBI regulations, RBI macro policy, FII/DII flows, and all global investment frameworks.
+
+The user typed: "${raw}"
+${cmpInstruction}
+${holdingPeriod ? `INVESTOR HOLDING PERIOD: ${holdingPeriod}` : ''}
+${riskAppetite ? `INVESTOR RISK APPETITE: ${riskAppetite}` : ''}
+${investAmount ? `INVESTMENT AMOUNT: ₹${Number(investAmount).toLocaleString('en-IN')}` : ''}
+
+Identify the NSE/BSE listed company. Tailor the entire analysis — verdict, entry zone, stop loss, timeline, position sizing, and rationale — specifically to the investor profile above. Using your complete knowledge — business model, recent quarterly results, management quality, sector context, chart patterns, valuation, institutional activity, macro factors — provide a full analysis.
+
+Apply: RSI, MACD, 50/200 DMA, Bollinger Bands, Fibonacci, ADX, volume (technical); P/E vs peers, PEG, Graham Number, DCF, Altman Z-Score, ROE/ROCE, debt, promoter holding/pledge (fundamental); FII/DII net flow, PLI eligibility, GST impact, RBI rate sensitivity, government capex exposure, INR sensitivity, SEBI patterns (India-specific).
+
+Respond ONLY with valid JSON — no markdown, no backticks, no extra text:
+{
+  "companyFullName": "...",
+  "nseSymbol": "...",
+  "sector": "...",
+  "verdict": "BUY" or "HOLD" or "SELL",
+  "confidence": <60-96>,
+  "rationalePoints": [
+    "<concise point 1 — key driver or valuation insight, India context>",
+    "<concise point 2 — technical or chart observation>",
+    "<concise point 3 — risk or macro factor>",
+    "<concise point 4 — catalyst or sector tailwind>"
+  ],
+  "technicalScore": <integer -10 to 10>,
+  "fundamentalScore": <integer -10 to 10>,
+  "sentimentScore": <integer -10 to 10>,
+  "technicalSignals": [
+    {"name":"RSI","value":"~XX, ...","sentiment":"bullish|neutral|bearish"},
+    {"name":"MACD","value":"...","sentiment":"bullish|neutral|bearish"},
+    {"name":"50/200 DMA","value":"...","sentiment":"bullish|neutral|bearish"},
+    {"name":"Bollinger Band","value":"...","sentiment":"bullish|neutral|bearish"},
+    {"name":"Volume","value":"...","sentiment":"bullish|neutral|bearish"}
+  ],
+  "fundamentalSignals": [
+    {"name":"P/E Ratio","value":"...","sentiment":"bullish|neutral|bearish"},
+    {"name":"Graham Number","value":"...","sentiment":"bullish|neutral|bearish"},
+    {"name":"Debt-to-Equity","value":"...","sentiment":"bullish|neutral|bearish"},
+    {"name":"ROE / ROCE","value":"...","sentiment":"bullish|neutral|bearish"},
+    {"name":"Promoter Holding","value":"...","sentiment":"bullish|neutral|bearish"}
+  ],
+  "currentMarketPrice": "${liveData.live ? liveData.price : ''}",
+  "priceIsLive": ${liveData.live},
+  "entryAdvice": "NOW" or "WAIT",
+  "entryPrice": "₹XXX–₹XXX (ideal entry zone, or 'No entry recommended' if SELL)",
+  "entryReason": "<1 sentence — why this entry price / why not to enter>",
+  "stopLoss": "₹XXX",
+  "potentialUpside": "+XX%",
+  "positionSize": "<if investment amount given: recommended qty of shares and lot size. If not given: omit this field>",
+  "capitalAtRisk": "<if investment amount given: ₹XXX at risk based on stop loss. If not given: omit>",
+  "timeline": {
+    "short":  {"period":"1–3 months",  "expectation":"...", "price":"₹XXX–₹XXX"},
+    "medium": {"period":"3–12 months", "expectation":"...", "price":"₹XXX–₹XXX"},
+    "long":   {"period":"1–3 years",   "expectation":"...", "price":"₹XXX–₹XXX"}
+  },
+  "catalysts": ["...", "...", "..."],
+  "risks":     ["...", "...", "..."],
+  "investorType": "..."
+}`;
+
+  try{
+    const res=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:4000,
+        messages:[{role:"user",content:prompt}]
+      })
+    });
+    step('s5','done');
+    await wait(300);
+    const data=await res.json();
+    const txt=data.content?.map(b=>b.text||'').join('')||'';
+    let p;
+    try{
+      // strip markdown fences
+      let clean=txt.replace(/```json|```/g,'').trim();
+      // extract first {...} block in case there's surrounding text
+      const match=clean.match(/\{[\s\S]*\}/);
+      if(match) clean=match[0];
+      p=JSON.parse(clean);
+    }catch(e){
+      console.error('Parse error:',e,'\nRaw:',txt);
+      p=fallback(txt,raw);
+    }
+    // Stamp live price info onto parsed result
+    if(liveData.live){ p.currentMarketPrice=liveData.price; p.priceIsLive=true; p.priceIsManual=!!liveData.manual; }
+    document.getElementById('loadingBox').style.display='none';
+    render(p);
+  }catch{
+    document.getElementById('loadingBox').style.display='none';
+    document.getElementById('searchBox').style.display='block';
+    alert('Analysis failed. Please try again.');
+  }
+}
+
+function fallback(txt,raw){
+  return{
+    companyFullName:raw,nseSymbol:raw.toUpperCase(),
+    sector:'Indian Equity',cmp:'N/A',
+    verdict:'HOLD',confidence:65,
+    rationalePoints:['Analysis based on available AI knowledge.','Please verify with live market data before investing.'],
+    technicalScore:0,fundamentalScore:0,sentimentScore:0,
+    technicalSignals:[],fundamentalSignals:[],
+    priceIsLive:false,priceIsManual:false,
+    stopLoss:'N/A',potentialUpside:'N/A',
+    timeline:{
+      short:{period:'1–3 months',expectation:'Consolidation likely.',price:'N/A'},
+      medium:{period:'3–12 months',expectation:'Watch quarterly triggers.',price:'N/A'},
+      long:{period:'1–3 years',expectation:'Structural story in progress.',price:'N/A'}
+    },
+    catalysts:['Monitor upcoming results'],
+    risks:['Market volatility'],
+    investorType:'Consult a SEBI-registered advisor.'
+  };
+}
+
+function sc(n){return n>=3?'pos':n<=-3?'neg':'neu';}
+function sv(s){return s==='bullish'?'bull':s==='bearish'?'bear':'neut';}
+
+function render(p){
+  const holdingPeriod=document.getElementById('holdingPeriod').value;
+  const riskAppetite=document.getElementById('riskAppetite').value;
+  const horizonLabels={'intraday':'Intraday','short':'Short-term','swing':'Swing trade','medium':'Medium-term','long':'Long-term','very_long':'Long-term 3yr+'};
+  const riskLabels={'conservative':'Conservative','moderate':'Moderate','aggressive':'Aggressive','speculative':'Speculative'};
+  p.horizonTag=[holdingPeriod?horizonLabels[holdingPeriod]:'',riskAppetite?riskLabels[riskAppetite]:''].filter(Boolean).join(' · ');
+  const v=(p.verdict||'HOLD').toUpperCase();
+  const cls=v==='BUY'?'buy':v==='SELL'?'sell':'hold';
+  const conf=Math.min(96,Math.max(60,p.confidence||70));
+  const upside=p.potentialUpside||'N/A';
+  const upsidePos=upside.startsWith('+');
+
+  // rationale bullets
+  const bullets=(p.rationalePoints||[]).map(r=>
+    `<li><span class="r-bullet">▸</span><span>${r}</span></li>`).join('');
+
+  // signals
+  const techRows=(p.technicalSignals||[]).map(s=>
+    `<div class="sig-row"><span class="sig-n">${s.name}</span><span class="sig-v ${sv(s.sentiment)}">${s.value}</span></div>`).join('');
+
+  const fundRows=(p.fundamentalSignals||[]).map(s=>
+    `<div class="sig-row"><span class="sig-n">${s.name}</span><span class="sig-v ${sv(s.sentiment)}">${s.value}</span></div>`).join('');
+
+  const tl=p.timeline||{};
+  const sh=tl.short||{};const md=tl.medium||{};const lg=tl.long||{};
+
+  const cats=(p.catalysts||[]).map(c=>`<li><span class="cr-icon">↑</span>${c}</li>`).join('');
+  const risks=(p.risks||[]).map(r=>`<li><span class="cr-icon">↓</span>${r}</li>`).join('');
+
+  document.getElementById('resultBox').innerHTML=`
+<div class="${cls}">
+
+  <!-- VERDICT -->
+  <div class="v-card ${cls}">
+    <div class="v-glow"></div>
+    <div class="v-top">
+      <div>
+        <div class="v-name">${p.companyFullName||p.nseSymbol}</div>
+        <div class="v-meta">${p.nseSymbol||''}&nbsp;·&nbsp;${p.sector||''}&nbsp;·&nbsp;CMP ${p.currentMarketPrice||'N/A'}</div>
+        <div class="v-meta" style="margin-top:3px;color:var(--blue);opacity:.8;">${p.horizonTag||''}</div>
+      </div>
+      <div class="v-verdict-block">
+        <div class="v-word">${v}</div>
+        <div class="v-conf-label">Conviction ${conf}%</div>
+      </div>
+    </div>
+    <div class="conf-bar"><div class="conf-fill" id="cf" style="width:0%"></div></div>
+  </div>
+
+  <!-- RATIONALE POINTERS -->
+  <div class="rationale-block">
+    <div class="rationale-eyebrow">Analyst Rationale</div>
+    <ul class="rationale-list">${bullets||'<li><span class="r-bullet">▸</span><span>Analysis complete. See signals below.</span></li>'}</ul>
+  </div>
+
+  <!-- SCORES -->
+  <div class="scores">
+    <div class="sc">
+      <div class="sc-label">Technical</div>
+      <div class="sc-num ${sc(p.technicalScore)}">${p.technicalScore>0?'+':''}${p.technicalScore||0}</div>
+      <div class="sc-sub">out of ±10</div>
+    </div>
+    <div class="sc">
+      <div class="sc-label">Fundamental</div>
+      <div class="sc-num ${sc(p.fundamentalScore)}">${p.fundamentalScore>0?'+':''}${p.fundamentalScore||0}</div>
+      <div class="sc-sub">out of ±10</div>
+    </div>
+    <div class="sc">
+      <div class="sc-label">Sentiment</div>
+      <div class="sc-num ${sc(p.sentimentScore)}">${p.sentimentScore>0?'+':''}${p.sentimentScore||0}</div>
+      <div class="sc-sub">out of ±10</div>
+    </div>
+  </div>
+
+  <!-- SIGNALS -->
+  <div class="signals">
+    <div class="sig-block">
+      <div class="sig-block-title">📈 Technical Signals</div>
+      ${techRows||'<div class="sig-row"><span class="sig-n" style="color:var(--text3)">Based on available data</span></div>'}
+    </div>
+    <div class="sig-block">
+      <div class="sig-block-title">📋 Fundamental Signals</div>
+      ${fundRows||'<div class="sig-row"><span class="sig-n" style="color:var(--text3)">Based on available data</span></div>'}
+    </div>
+  </div>
+
+  <!-- CMP + ENTRY -->
+  <div class="metrics-row" style="grid-template-columns:repeat(3,1fr);">
+    <div class="metric-card">
+      <div class="metric-label">Current Market Price</div>
+      <div class="metric-value" style="color:var(--blue)">${p.currentMarketPrice||'N/A'}</div>
+      <div class="metric-hint">${p.priceIsLive?(p.priceIsManual?'✏️ Manually entered':'🟢 Live via Yahoo Finance'):'🟡 AI estimate · verify on NSE'}</div>
+    </div>
+    <div class="metric-card" style="border-color:${(p.entryAdvice||'').toUpperCase()==='NOW'?'rgba(0,201,122,.35)':'rgba(245,158,11,.35)'}">
+      <div class="metric-label">Entry Advice</div>
+      <div class="metric-value" style="color:${(p.entryAdvice||'').toUpperCase()==='NOW'?'var(--green)':'var(--amber)'};font-size:28px;">${p.entryAdvice==='NOW'?'✦ Enter Now':(p.entryAdvice==='WAIT'?'⏳ Wait for Dip':'— No Entry')}</div>
+      <div class="metric-hint" style="margin-top:6px;font-size:10px;line-height:1.5;">${p.entryReason||''}</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Ideal Entry Zone</div>
+      <div class="metric-value green-v" style="font-size:${(p.entryPrice||'').length>10?'20px':'28px'}">${p.entryPrice||'N/A'}</div>
+      <div class="metric-hint">Buy between this range</div>
+    </div>
+  </div>
+
+  <!-- STOP LOSS + UPSIDE -->
+  <div class="metrics-row">
+    <div class="metric-card">
+      <div class="metric-label">Stop Loss</div>
+      <div class="metric-value red-v">${p.stopLoss||'N/A'}</div>
+      <div class="metric-hint">Exit if price falls below this level</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Potential Upside</div>
+      <div class="metric-value ${upsidePos?'green-v':'red-v'}">${upside}</div>
+      <div class="metric-hint">Estimated from current market price</div>
+    </div>
+  </div>
+
+  <!-- POSITION SIZING (only if investment amount was given) -->
+  ${(p.positionSize||p.capitalAtRisk)?`
+  <div class="metrics-row" style="grid-template-columns:1fr 1fr;">
+    <div class="metric-card" style="border-color:rgba(59,130,246,.3);">
+      <div class="metric-label">Recommended Position</div>
+      <div class="metric-value" style="color:var(--blue);font-size:22px;">${p.positionSize||'—'}</div>
+      <div class="metric-hint">Based on ₹${Number(document.getElementById('investAmount').value||0).toLocaleString('en-IN')} investment</div>
+    </div>
+    <div class="metric-card" style="border-color:rgba(255,61,90,.3);">
+      <div class="metric-label">Capital at Risk</div>
+      <div class="metric-value red-v" style="font-size:22px;">${p.capitalAtRisk||'—'}</div>
+      <div class="metric-hint">If stop loss is triggered</div>
+    </div>
+  </div>`:''} 
+
+  <!-- TIMELINE -->
+  <div class="timeline">
+    <div class="tl-title">⏱ Investment Timeline</div>
+    <div class="tl-track">
+      <div class="tl-item t-s">
+        <span class="tl-dot"></span>
+        <div>
+          <div class="tl-period">${sh.period||'1–3 Months'}</div>
+          <div class="tl-text">${sh.expectation||'Short-term outlook pending.'}</div>
+          ${sh.price&&sh.price!=='N/A'?`<span class="tl-price">Est. Range: ${sh.price}</span>`:''}
+        </div>
+      </div>
+      <div class="tl-item t-m">
+        <span class="tl-dot"></span>
+        <div>
+          <div class="tl-period">${md.period||'3–12 Months'}</div>
+          <div class="tl-text">${md.expectation||'Medium-term outlook pending.'}</div>
+          ${md.price&&md.price!=='N/A'?`<span class="tl-price">Est. Range: ${md.price}</span>`:''}
+        </div>
+      </div>
+      <div class="tl-item t-l">
+        <span class="tl-dot"></span>
+        <div>
+          <div class="tl-period">${lg.period||'1–3 Years'}</div>
+          <div class="tl-text">${lg.expectation||'Long-term thesis pending.'}</div>
+          ${lg.price&&lg.price!=='N/A'?`<span class="tl-price">Est. Range: ${lg.price}</span>`:''}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATALYSTS & RISKS -->
+  <div class="cr-grid">
+    <div class="cr-block">
+      <div class="cr-title cat">↑ Catalysts</div>
+      <ul class="cr-list">${cats||'<li><span class="cr-icon">↑</span>No specific catalysts</li>'}</ul>
+    </div>
+    <div class="cr-block">
+      <div class="cr-title risk">↓ Key Risks</div>
+      <ul class="cr-list">${risks||'<li><span class="cr-icon">↓</span>No specific risks flagged</li>'}</ul>
+    </div>
+  </div>
+
+  <!-- INVESTOR TYPE -->
+  ${p.investorType?`<div class="investor-tag">👤 &nbsp;${p.investorType}</div>`:''}
+
+  <div class="disc">
+    ⚠ DISCLAIMER — AlgoEdge analysis is AI-generated for educational purposes only. This is not SEBI-registered investment advice. Prices are approximate based on AI training data and may not reflect real-time market conditions. Always verify with live data and consult a SEBI-registered advisor before investing. Markets are subject to risk.
+  </div>
+  <button class="reset-btn" onclick="reset()">← Analyse another stock</button>
+</div>`;
+
+  document.getElementById('resultBox').style.display='block';
+  setTimeout(()=>{
+    const f=document.getElementById('cf');
+    if(f)f.style.width=conf+'%';
+  },300);
+}
+
+function reset(){
+  document.getElementById('resultBox').style.display='none';
+  document.getElementById('resultBox').innerHTML='';
+  document.getElementById('searchBox').style.display='block';
+  document.getElementById('stockInput').value='';
+  document.getElementById('cmpOverride').value='';
+  document.getElementById('holdingPeriod').value='';
+  document.getElementById('riskAppetite').value='';
+  document.getElementById('investAmount').value='';
+  document.getElementById('stockInput').focus();
+  const ids=['s1','s2','s3','s4','s5'];
+  ids.forEach(id=>{ document.getElementById(id).className='st'; });
+}
+</script>
+</body>
+</html>
